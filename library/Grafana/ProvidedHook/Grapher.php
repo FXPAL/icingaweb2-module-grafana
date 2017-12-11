@@ -374,9 +374,26 @@ class Grapher extends GrapherHook
             $this->customVars = str_replace($search, $replace, $this->customVars);
         }
 
+        $view_url_format = '%s://%s/dashboard-solo/%s/%s?var-hostname=%s&var-service=%s%s&panelId=%s&orgId=%s&theme=%s&from=now-%s&to=now';
+            $view_url = sprintf(
+                $view_url_format,
+                $this->protocol,
+                $this->grafanaHost,
+                $this->dashboardstore,
+                $this->dashboard,
+                urlencode($hostName),
+                rawurlencode($serviceName),
+                $this->customVars,
+                $this->panelId,
+                $this->orgId,
+                $this->grafanaTheme,
+                $this->timerange,
+                rawurlencode($serviceName)
+            );
+
         $return_html = "";
         $menu = '<table class="grafana-table"><tr>';
-        $menu .= '<td><div class="grafana-icon"><div class="grafana-clock"></div></div></td>';
+        $menu .= '<td><a href="'.$view_url.'" target="_new"><div class="grafana-icon"><div class="grafana-clock"></div></div></a></td>';
         foreach ($this->timeRanges as $key => $mainValue) {
             $menu .= '<td><ul class="grafana-menu-navigation"><a class="main" href="#">' . $key . '</a>';
             $counter = 1;
